@@ -1,4 +1,5 @@
 import Stories from "./pages/stories.js";
+import Item from "./pages/item.js";
 
 const root = null;
 const useHash = true;
@@ -16,6 +17,7 @@ export default class RouterHandler {
       { path: "/new", page: Stories },
       { path: "/ask", page: Stories },
       { path: "/show", page: Stories },
+      { path: '/item', page: Item },
     ];
 
     routes.forEach(({ path, page }) => {
