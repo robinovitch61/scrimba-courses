@@ -2,7 +2,7 @@ import Stories from "./pages/stories.js";
 
 const root = null;
 const useHash = true;
-const hash = '#';
+const hash = '#!';
 const router = new Navigo(root, useHash, hash);
 
 export default class RouterHandler {
