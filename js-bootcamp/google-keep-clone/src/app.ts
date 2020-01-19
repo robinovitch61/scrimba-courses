@@ -1,26 +1,41 @@
 class App {
+  notes: object[];
+  title: string;
+  text: string;
+  id: number;
+  $form: Element;
+  $noteTitle: Element;
+  $noteText: Element;
+  $formButtons: Element;
+  $placeholder: Element;
+  $notes: Element;
+  $formCloseButton: Element;
+  $modal: Element;
+  $modalTitle: Element;
+  $modalText: Element;
+  $modalCloseButton: Element;
+  $colorTooltip: Element;
+
   constructor() {
-    // localStorage access is browser dependent!
-    // this.notes = JSON.parse(localStorage.getItem("notes")) || [];
     this.notes = [];
 
     this.title = "";
     this.text = "";
-    this.id = "";
+    this.id = 0;
 
     // '$' indicates an element rather than data
-    this.$form = document.querySelector("#form");
-    this.$noteTitle = document.querySelector("#note-title");
-    this.$noteText = document.querySelector("#note-text");
-    this.$formButtons = document.querySelector("#form-buttons");
-    this.$placeholder = document.querySelector("#placeholder");
-    this.$notes = document.querySelector("#notes");
-    this.$formCloseButton = document.querySelector("#form-close-button");
-    this.$modal = document.querySelector(".modal");
-    this.$modalTitle = document.querySelector(".modal-title");
-    this.$modalText = document.querySelector(".modal-text");
-    this.$modalCloseButton = document.querySelector(".modal-close-button");
-    this.$colorTooltip = document.querySelector("#color-tooltip");
+    this.$form = document.querySelector("#form") as Element;
+    this.$noteTitle = document.querySelector("#note-title") as Element;
+    this.$noteText = document.querySelector("#note-text") as Element;
+    this.$formButtons = document.querySelector("#form-buttons") as Element;
+    this.$placeholder = document.querySelector("#placeholder") as Element;
+    this.$notes = document.querySelector("#notes") as Element;
+    this.$formCloseButton = document.querySelector("#form-close-button") as Element;
+    this.$modal = document.querySelector(".modal") as Element;
+    this.$modalTitle = document.querySelector(".modal-title") as Element;
+    this.$modalText = document.querySelector(".modal-text") as Element;
+    this.$modalCloseButton = document.querySelector(".modal-close-button") as Element;
+    this.$colorTooltip = document.querySelector("#color-tooltip") as Element;
 
     this.render();
     this.addEventListeners();
@@ -53,7 +68,7 @@ class App {
     })
 
     this.$colorTooltip.addEventListener("click", event => {
-      const color = event.target.dataset.color; 
+      const color: string = event.target.dataset.color; 
       if (color) {
         this.editNoteColor(color);  
       }
@@ -62,8 +77,8 @@ class App {
     this.$form.addEventListener("submit", event => {
       // prevent default of page reloading
       event.preventDefault(); 
-      const title = this.$noteTitle.value;
-      const text = this.$noteText.value;
+      const title: string = this.$noteTitle.value;
+      const text: string = this.$noteText.value;
       const hasNote = title || text;
 
       if (hasNote) {
@@ -82,12 +97,12 @@ class App {
     });
   }
 
-  handleFormClick(event) {
-    const isFormClicked = this.$form.contains(event.target);
+  handleFormClick(event: Event) {
+    const isFormClicked: boolean = this.$form.contains(event.target);
     
-    const title = this.$noteTitle.value;
-    const text = this.$noteText.value;
-    const hasNote = title || text;
+    const title: string = this.$noteTitle.value;
+    const text: string = this.$noteText.value;
+    const hasNote: boolean = title.length > 0 || text.length > 0;
 
     if (isFormClicked) {
       this.openForm();
@@ -116,7 +131,7 @@ class App {
     this.$modal.classList.toggle("open-modal");
   }
 
-  openModal(event) {
+  openModal(event: Event) {
     if (event.target.matches('.toolbar-delete')) return;  
 
     // '.closest' goes up the tree to find the selector
@@ -127,12 +142,12 @@ class App {
     }
   }
 
-  closeModal(event) {
+  closeModal(event: Event) {
     this.editNote();
     this.toggleModalVisibility();
   }
 
-  openTooltip(event) {
+  openTooltip(event: Event) {
     if (!event.target.matches(".toolbar-color")) return;
     this.id = event.target.dataset.id;
     const noteCoords = event.target.getBoundingClientRect();
@@ -142,13 +157,13 @@ class App {
     this.$colorTooltip.style.display = "flex";
   }
 
-  closeTooltip(event) {
+  closeTooltip(event: Event) {
     if (!event.target.matches(".toolbar-color")) return;
     this.$colorTooltip.style.display = "none";  
   }
 
-  selectNote(event) {
-    const $selectedNote = event.target.closest(".note");
+  selectNote(event: Event) {
+    const $selectedNote: Element = event.target.closest(".note");
     if (!$selectedNote) return;
     const [ $noteTitle, $noteText ] = $selectedNote.children;
     this.title = $noteTitle.innerText;
@@ -176,7 +191,7 @@ class App {
     this.render();
   }
 
-  editNoteColor(color) {
+  editNoteColor(color: string) {
     this.notes = this.notes.map(note =>
       note.id === Number(this.id) ? { ...note, color } : note
     );
@@ -206,10 +221,10 @@ class App {
     `).join("")
   }
 
-  deleteNote(event) {
+  deleteNote(event: Event) {
     event.stopPropagation();
     if (!event.target.matches(".toolbar-delete")) return;
-    const id = event.target.dataset.id;
+    const id: string = event.target.dataset.id;
     this.notes = this.notes.filter(note => note.id !== Number(id));
     this.render();
   }
@@ -224,4 +239,4 @@ class App {
   }
 }
 
-new App()
+new App();
