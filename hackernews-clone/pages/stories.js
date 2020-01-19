@@ -24,16 +24,6 @@ export default async function Stories(path) {
   });
 }
 
-function getFormattedStories(stories, favorites) {
-  return stories.map((story, idx) =>
-    Story({
-      ...story,
-      index: idx+1,
-      isFavorite: checkFavorite(favorites, story),
-    })
-  ).join("");
-}
-
 async function getStories(path) {
   const apiPath = getApiPath(path);
   const response = await fetch(`${baseUrl}${apiPath}`);
@@ -47,4 +37,14 @@ function getApiPath(path) {
     case "/new": return "/newest";
     default: return path;
   }
+}
+
+function getFormattedStories(stories, favorites) {
+  return stories.map((story, idx) =>
+    Story({
+      ...story,
+      index: idx+1,
+      isFavorite: checkFavorite(favorites, story),
+    })
+  ).join("");
 }

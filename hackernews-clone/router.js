@@ -1,5 +1,6 @@
 import Stories from "./pages/stories.js";
 import Item from "./pages/item.js";
+import Favorites from "./pages/favorites.js";
 
 const root = null;
 const useHash = true;
@@ -18,6 +19,7 @@ export default class RouterHandler {
       { path: "/ask", page: Stories },
       { path: "/show", page: Stories },
       { path: '/item', page: Item },
+      { path: '/favorites', page: Favorites },
     ];
     
     routes.forEach(({ path, page }) => {
