@@ -19,7 +19,7 @@ export default class RouterHandler {
       { path: "/show", page: Stories },
       { path: '/item', page: Item },
     ];
-
+    
     routes.forEach(({ path, page }) => {
       router.on(path, () => {
         page(path);
