@@ -1,28 +1,42 @@
-function getNotNullElement(selector: string): Element {
+function getNotNullHTMLInputElement(selector: string): HTMLInputElement {
   let elem = document.querySelector(selector);
-  if (elem == null) {
-    throw TypeError(`'${selector}' returned null rather than Element!`);
+  if (!(elem instanceof HTMLInputElement)) {
+    throw TypeError(`'${selector}' returned null rather than HTMLInputElement!`);
   }
   return elem;
 }
 
+function isHTMLInputElement(event: any) {
+  if (!(event.target instanceof HTMLInputElement)) {
+    throw TypeError("Event returned non-HTMLInputElement!");
+  }
+  return event.target;
+}
+
+interface Note {
+  id: number,
+  title: string,
+  text: string,
+  color: string,
+}
+
 class App {
-  notes: object[];
+  notes: Note[];
   title: string;
   text: string;
   id: number;
-  $form: Element;
-  $noteTitle: Element;
-  $noteText: Element;
-  $formButtons: Element;
-  $placeholder: Element;
-  $notes: Element;
-  $formCloseButton: Element;
-  $modal: Element;
-  $modalTitle: Element;
-  $modalText: Element;
-  $modalCloseButton: Element;
-  $colorTooltip: Element;
+  $form: HTMLInputElement;
+  $noteTitle: HTMLInputElement;
+  $noteText: HTMLInputElement;
+  $formButtons: HTMLInputElement;
+  $placeholder: HTMLInputElement;
+  $notes: HTMLInputElement;
+  $formCloseButton: HTMLInputElement;
+  $modal: HTMLInputElement;
+  $modalTitle: HTMLInputElement;
+  $modalText: HTMLInputElement;
+  $modalCloseButton: HTMLInputElement;
+  $colorTooltip: HTMLInputElement;
 
   constructor() {
     this.notes = [];
@@ -31,19 +45,19 @@ class App {
     this.text = "";
     this.id = 0;
 
-    // '$' indicates an element rather than data
-    this.$form = getNotNullElement("#form");
-    this.$noteTitle = getNotNullElement("#note-title");
-    this.$noteText = getNotNullElement("#note-text");
-    this.$formButtons = getNotNullElement("#form-buttons");
-    this.$placeholder = getNotNullElement("#placeholder");
-    this.$notes = getNotNullElement("#notes");
-    this.$formCloseButton = getNotNullElement("#form-close-button");
-    this.$modal = getNotNullElement(".modal");
-    this.$modalTitle = getNotNullElement(".modal-title");
-    this.$modalText = getNotNullElement(".modal-text");
-    this.$modalCloseButton = getNotNullElement(".modal-close-button");
-    this.$colorTooltip = getNotNullElement("#color-tooltip");
+    // '$' indicates an HTMLInputElement rather than data
+    this.$form = getNotNullHTMLInputElement("#form");
+    this.$noteTitle = getNotNullHTMLInputElement("#note-title");
+    this.$noteText = getNotNullHTMLInputElement("#note-text");
+    this.$formButtons = getNotNullHTMLInputElement("#form-buttons");
+    this.$placeholder = getNotNullHTMLInputElement("#placeholder");
+    this.$notes = getNotNullHTMLInputElement("#notes");
+    this.$formCloseButton = getNotNullHTMLInputElement("#form-close-button");
+    this.$modal = getNotNullHTMLInputElement(".modal");
+    this.$modalTitle = getNotNullHTMLInputElement(".modal-title");
+    this.$modalText = getNotNullHTMLInputElement(".modal-text");
+    this.$modalCloseButton = getNotNullHTMLInputElement(".modal-close-button");
+    this.$colorTooltip = getNotNullHTMLInputElement("#color-tooltip");
 
     this.render();
     this.addEventListeners();
@@ -65,7 +79,7 @@ class App {
       this.closeTooltip(event);
     });
 
-    this.$colorTooltip.addEventListener('mouseover', function() {
+    this.$colorTooltip.addEventListener('mouseover', function(this: HTMLInputElement) {
       // because used function and not arrow function,
       // 'this' refers to $colorTooltip
       this.style.display = "flex";
@@ -76,7 +90,7 @@ class App {
     })
 
     this.$colorTooltip.addEventListener("click", event => {
-      const color: string = event.target.dataset.color; 
+      const color: string = isHTMLInputElement(event.target).dataset.color; 
       if (color) {
         this.editNoteColor(color);  
       }
@@ -106,7 +120,7 @@ class App {
   }
 
   handleFormClick(event: Event) {
-    const isFormClicked: boolean = this.$form.contains(event.target);
+    const isFormClicked: boolean = this.$form.contains(isHTMLInputElement(event.target));
     
     const title: string = this.$noteTitle.value;
     const text: string = this.$noteText.value;
@@ -140,10 +154,10 @@ class App {
   }
 
   openModal(event: Event) {
-    if (event.target.matches('.toolbar-delete')) return;  
+    if (isHTMLInputElement(event.target).matches('.toolbar-delete')) return;  
 
     // '.closest' goes up the tree to find the selector
-    if (event.target.closest(".note")) {
+    if (isHTMLInputElement(event.target).closest(".note")) {
       this.toggleModalVisibility();
       this.$modalTitle.value = this.title;
       this.$modalText.value = this.text;
@@ -156,9 +170,9 @@ class App {
   }
 
   openTooltip(event: Event) {
-    if (!event.target.matches(".toolbar-color")) return;
-    this.id = event.target.dataset.id;
-    const noteCoords = event.target.getBoundingClientRect();
+    if (!isHTMLInputElement(event.target).matches(".toolbar-color")) return;
+    this.id = isHTMLInputElement(event.target).dataset.id;
+    const noteCoords = isHTMLInputElement(event.target).getBoundingClientRect();
     const horizontal = noteCoords.left + window.scrollX;
     const vertical = noteCoords.top + window.scrollY + 60;
     this.$colorTooltip.style.transform = `translate(${horizontal}px, ${vertical}px)`;
@@ -166,14 +180,16 @@ class App {
   }
 
   closeTooltip(event: Event) {
-    if (!event.target.matches(".toolbar-color")) return;
+    if (!isHTMLInputElement(event.target).matches(".toolbar-color")) return;
     this.$colorTooltip.style.display = "none";  
   }
 
   selectNote(event: Event) {
-    const $selectedNote: Element = event.target.closest(".note");
+    const $selectedNote: Note = isHTMLInputElement(event.target).closest(".note");
     if (!$selectedNote) return;
-    const [ $noteTitle, $noteText ] = $selectedNote.children;
+    const $noteTitle = isHTMLInputElement($selectedNote.children[0]);
+    const $noteText = isHTMLInputElement($selectedNote.children[1]);
+    // const [ $noteTitle, $noteText ] = $selectedNote.children[1];
     this.title = $noteTitle.innerText;
     this.text = $noteText.innerText;
     this.id = $selectedNote.dataset.id;
@@ -231,8 +247,8 @@ class App {
 
   deleteNote(event: Event) {
     event.stopPropagation();
-    if (!event.target.matches(".toolbar-delete")) return;
-    const id: string = event.target.dataset.id;
+    if (!isHTMLInputElement(event.target).matches(".toolbar-delete")) return;
+    const id: string = isHTMLInputElement(event.target).dataset.id;
     this.notes = this.notes.filter(note => note.id !== Number(id));
     this.render();
   }
