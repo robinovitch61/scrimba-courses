@@ -1,3 +1,11 @@
+function getNotNullElement(selector: string): Element {
+  let elem = document.querySelector(selector);
+  if (elem == null) {
+    throw TypeError(`'${selector}' returned null rather than Element!`);
+  }
+  return elem;
+}
+
 class App {
   notes: object[];
   title: string;
@@ -24,18 +32,18 @@ class App {
     this.id = 0;
 
     // '$' indicates an element rather than data
-    this.$form = document.querySelector("#form") as Element;
-    this.$noteTitle = document.querySelector("#note-title") as Element;
-    this.$noteText = document.querySelector("#note-text") as Element;
-    this.$formButtons = document.querySelector("#form-buttons") as Element;
-    this.$placeholder = document.querySelector("#placeholder") as Element;
-    this.$notes = document.querySelector("#notes") as Element;
-    this.$formCloseButton = document.querySelector("#form-close-button") as Element;
-    this.$modal = document.querySelector(".modal") as Element;
-    this.$modalTitle = document.querySelector(".modal-title") as Element;
-    this.$modalText = document.querySelector(".modal-text") as Element;
-    this.$modalCloseButton = document.querySelector(".modal-close-button") as Element;
-    this.$colorTooltip = document.querySelector("#color-tooltip") as Element;
+    this.$form = getNotNullElement("#form");
+    this.$noteTitle = getNotNullElement("#note-title");
+    this.$noteText = getNotNullElement("#note-text");
+    this.$formButtons = getNotNullElement("#form-buttons");
+    this.$placeholder = getNotNullElement("#placeholder");
+    this.$notes = getNotNullElement("#notes");
+    this.$formCloseButton = getNotNullElement("#form-close-button");
+    this.$modal = getNotNullElement(".modal");
+    this.$modalTitle = getNotNullElement(".modal-title");
+    this.$modalText = getNotNullElement(".modal-text");
+    this.$modalCloseButton = getNotNullElement(".modal-close-button");
+    this.$colorTooltip = getNotNullElement("#color-tooltip");
 
     this.render();
     this.addEventListeners();
@@ -171,7 +179,7 @@ class App {
     this.id = $selectedNote.dataset.id;
   }
 
-  addNote({ title, text }) {
+  addNote({ title, text }: {title: string, text:string}) {
     const newNote = {
       title,
       text,

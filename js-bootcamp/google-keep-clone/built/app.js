@@ -1,4 +1,11 @@
 "use strict";
+function getNotNullElement(selector) {
+    let elem = document.querySelector(selector);
+    if (elem == null) {
+        throw TypeError(`'${selector}' returned null rather than Element!`);
+    }
+    return elem;
+}
 class App {
     constructor() {
         this.notes = [];
@@ -6,18 +13,18 @@ class App {
         this.text = "";
         this.id = 0;
         // '$' indicates an element rather than data
-        this.$form = document.querySelector("#form");
-        this.$noteTitle = document.querySelector("#note-title");
-        this.$noteText = document.querySelector("#note-text");
-        this.$formButtons = document.querySelector("#form-buttons");
-        this.$placeholder = document.querySelector("#placeholder");
-        this.$notes = document.querySelector("#notes");
-        this.$formCloseButton = document.querySelector("#form-close-button");
-        this.$modal = document.querySelector(".modal");
-        this.$modalTitle = document.querySelector(".modal-title");
-        this.$modalText = document.querySelector(".modal-text");
-        this.$modalCloseButton = document.querySelector(".modal-close-button");
-        this.$colorTooltip = document.querySelector("#color-tooltip");
+        this.$form = getNotNullElement("#form");
+        this.$noteTitle = getNotNullElement("#note-title");
+        this.$noteText = getNotNullElement("#note-text");
+        this.$formButtons = getNotNullElement("#form-buttons");
+        this.$placeholder = getNotNullElement("#placeholder");
+        this.$notes = getNotNullElement("#notes");
+        this.$formCloseButton = getNotNullElement("#form-close-button");
+        this.$modal = getNotNullElement(".modal");
+        this.$modalTitle = getNotNullElement(".modal-title");
+        this.$modalText = getNotNullElement(".modal-text");
+        this.$modalCloseButton = getNotNullElement(".modal-close-button");
+        this.$colorTooltip = getNotNullElement("#color-tooltip");
         this.render();
         this.addEventListeners();
     }
@@ -71,7 +78,7 @@ class App {
         const isFormClicked = this.$form.contains(event.target);
         const title = this.$noteTitle.value;
         const text = this.$noteText.value;
-        const hasNote = title || text;
+        const hasNote = title.length > 0 || text.length > 0;
         if (isFormClicked) {
             this.openForm();
         }
