@@ -1,4 +1,6 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).<br />
+
+**I deleted all the files initially in `src` and built my own based off the scrimba course.**
 
 ## Available Scripts
 
