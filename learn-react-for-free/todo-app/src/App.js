@@ -1,7 +1,11 @@
 import React from "react";
+import ToDo from "./components/ToDo";
 
 export default function App() {
   return (
-    <h1>Temp</h1>
+    <div>
+      <ToDo />
+      <ToDo />
+    </div>
   )
 }
