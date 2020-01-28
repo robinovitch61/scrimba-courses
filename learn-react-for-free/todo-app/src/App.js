@@ -2,7 +2,7 @@ import React from "react";
 import ToDoItem from "./components/ToDoItem";
 import todosData from "./todosData";
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -10,9 +10,29 @@ export default class App extends React.Component {
     }
   }
 
+  handleChange = id => {
+    this.setState(prevState => {
+
+      const newtodosData = prevState.todos.map(todo => {
+        if (todo.id === id) {
+          todo.completed = !todo.completed
+        }
+        return todo
+      })
+
+      return {todos: newtodosData}
+    })
+  }
+
   render() {
     const todosComponents = this.state.todos.map(todo => {
-      return <ToDoItem key={todo.id} todo={todo} />
+      return (
+        <ToDoItem
+          key={todo.id}
+          todo={todo}
+          handleChange={this.handleChange}
+        />
+      )
     })
 
     return (
@@ -22,3 +42,5 @@ export default class App extends React.Component {
     )
   }
 }
+
+export default App;
