@@ -3,8 +3,8 @@ import ToDoItem from "./components/ToDoItem";
 import todosData from "./todosData";
 
 class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       todos: todosData
     }

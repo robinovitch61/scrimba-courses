@@ -1,7 +1,7 @@
 import React from "react";
 
 export default class TodoItem extends React.Component {
-  render () {
+  render() {
     const handleToDoChange = () => {
       this.props.handleChange(this.props.todo.id);
     }
