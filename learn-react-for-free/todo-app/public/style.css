@@ -45,3 +45,13 @@ input[type=checkbox] {
 input[type=checkbox]:focus {
   outline: 0;
 }
+
+.todo-text {
+  font-weight: bold;
+}
+
+.completed-text {
+  color: grey;
+  text-decoration: line-through;
+  font-style: italic;
+}
